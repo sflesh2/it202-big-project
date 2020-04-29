@@ -194,6 +194,18 @@
     margin-top: 10%; 
 }
 
+.crime-list-image{
+    margin-right: 25px; 
+}
+
+.crime-image-template{
+    display: none;
+}
+
+.template-crime{
+    display:none;
+}
+
 
 
 
