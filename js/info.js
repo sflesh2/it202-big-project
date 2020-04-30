@@ -19,16 +19,10 @@ let getAddr = (addr)=>{
 	}); 
     
 }
-//let getCrimeData = ()=>{
-    let url = "https://data.cityofchicago.org/resource/crimes.json?&year=2020"
-    //var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$limit=100";      
-      
-    fetch(url)
-	.then((response) =>{
-		return response.json(); 
-	})
-	.then((json) => {
-        let crimeList = document.querySelector("#crime-list");
+
+//This creates the list of crimes from the json data
+let addListItems = (json)=>{
+    let crimeList = document.querySelector("#crime-list");
         console.log(json);
 		for(item of json){
             let type = item["primary_type"];
@@ -71,9 +65,18 @@ let getAddr = (addr)=>{
                 templateItem.querySelector(".crime-location").textContent = item["block"];
                 crimeList.appendChild(templateItem); 
             }
-            
         }
-        
+}
+//let getCrimeData = ()=>{
+    let url = "https://data.cityofchicago.org/resource/crimes.json?&year=2020"
+    //var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$limit=100";      
+      
+    fetch(url)
+	.then((response) =>{
+		return response.json(); 
+	})
+	.then((json) => {
+       addListItems(json);
 	}); 
 //}
 
