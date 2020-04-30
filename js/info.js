@@ -1,5 +1,20 @@
+let getAddr = ()=>{
+    let url ="https://maps.googleapis.com/maps/api/geocode/json";
+    let address = "?address=1250+South+Halsted+Street";
+    let ending = ",+Chicago,+IL&key=AIzaSyD4CUESqGN4_hOPJTQnT3JFkerOgEANnEM";
+    url = url + address + ending;
+    fetch(url)
+	.then((response) =>{
+		return response.json(); 
+	})
+	.then((json) => {
+        console.log(json["results"][0]["geometry"]["location"]);
+        
+	}); 
+    
+}
 //let getCrimeData = ()=>{
-    let url = "https://data.cityofchicago.org/resource/crimes.json?$limit=50"
+    let url = "https://data.cityofchicago.org/resource/crimes.json?&year=2020"
     //var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$limit=100";      
       
     fetch(url)
@@ -8,7 +23,7 @@
 	})
 	.then((json) => {
         let crimeList = document.querySelector("#crime-list");
-        
+        console.log(json);
 		for(item of json){
             let type = item["primary_type"];
             let templateItem = document.querySelector(".template-crime").cloneNode(true);   

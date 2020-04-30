@@ -167,6 +167,22 @@
     transform: translate(-50%);
 }
 
+.filter-input{
+    
+    display: flex;
+    flex-direction: column;
+    margin: 0, auto;
+    position: fixed; 
+    top: 25%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%);
+}
+
+.filter-input-item{
+    margin-top: 2px;
+}
+
 .type-button{
     margin: 1%;
 }
