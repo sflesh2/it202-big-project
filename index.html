@@ -120,19 +120,19 @@
         <div class="filter-input">
             <label class="filter-input-item mdc-text-field mdc-text-field--no-label">
               <div class="mdc-text-field__ripple"></div>
-              <input class="mdc-text-field__input" type="text" placeholder="Year" aria-label="Label">
+              <input class="mdc-text-field__input" type="text" id ="yearInput" placeholder="Year" aria-label="Label">
               <div class="mdc-line-ripple"></div>
             </label>
             
             <label class="filter-input-item mdc-text-field mdc-text-field--no-label">
               <div class="mdc-text-field__ripple"></div>
-              <input class="mdc-text-field__input" type="text" placeholder="Address" aria-label="Label">
+              <input class="mdc-text-field__input" type="text" id="addressInput" placeholder="Address" aria-label="Label">
               <div class="mdc-line-ripple"></div>
             </label>
             
             <label class="filter-input-item mdc-text-field mdc-text-field--no-label">
               <div class="mdc-text-field__ripple"></div>
-              <input class="mdc-text-field__input" type="text" placeholder="Search Radius (miles)" aria-label="Label">
+              <input class="mdc-text-field__input" type="text" id="radiusInput" placeholder="Search Radius (miles)" aria-label="Label">
               <div class="mdc-line-ripple"></div>
             </label>
            
@@ -141,7 +141,7 @@
       
         
         <div class="button-list">
-            <button class="mdc-button Search-button mdc-button--raised"/>
+            <button class="mdc-button search-button mdc-button--raised"/>
             <div class="mdc-button__ripple"></div>
             <span class="mdc-button__label">Search</span>
             
@@ -164,7 +164,7 @@
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.add-button'));
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.remove-button'));
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.clear-button'));
-    //mdc.ripple.MDCRipple.attachTo(document.querySelector('.data-button'));
+    mdc.ripple.MDCRipple.attachTo(document.querySelector('.search-button'));
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.type-button'));
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.graph-button'));  
       

@@ -61,9 +61,8 @@ let addListItems = (json)=>{
         }
 }
 
+let allCrimeData = [];
 let getCrimeData = (year, address, radius)=>{
-    
-    
     fetch(getAddr("1250 South Halstead Street"))
 	.then((response) =>{
 		return response.json(); 
@@ -76,11 +75,12 @@ let getCrimeData = (year, address, radius)=>{
         //let Baseurl = "https://data.cityofchicago.org/resource/crimes.json?";
         //let searhYear = "&year="+year;
         let metersInMile = 1609.34;
+        
         radius = parseFloat(radius);
-        radius = (radius*metersInMile).toString();
+        radius = radius * metersInMile;
         let BaseUrl = "https://data.cityofchicago.org/resource/crimes.json?&";
         let sYear = "year=" + year; 
-        let within = "&$where=within_circle(location, " + lat.toString() + " , " + lng.toString() + " , "+ radius + ")";
+        let within = "&$where=within_circle(location, " + lat.toString() + " , " + lng.toString() + " , "+ radius.toString() + ")";
          
         BaseUrl = BaseUrl + sYear + within;
         return fetch(BaseUrl);
@@ -89,10 +89,28 @@ let getCrimeData = (year, address, radius)=>{
 		return response.json(); 
 	})
 	.then((json) => {
+       allCrimeData = json;
        addListItems(json);
 	}); 
 }
-getCrimeData("2020", "1250 South Halstead Street", ".25");
+
+
+document.querySelector(".search-button").addEventListener("click", (e)=>{
+    let year = document.querySelector("#yearInput"); 
+    let address = document.querySelector("#addressInput");
+    let radius = document.querySelector("#radiusInput");
+    
+    
+    changeScene("Data");
+    getCrimeData(year.value, address.value, radius.value);
+    year.value=""; 
+    address.value="";
+    radius.value="";
+    
+    //console.log(year.value + " " + address.value + " " + radius.value + " ");
+});
+
+
 let currScene = "Home"; //always start on the home screen
 let changeScene = (e)=>{
     //move the app to the data page
