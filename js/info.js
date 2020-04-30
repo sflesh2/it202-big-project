@@ -7,8 +7,50 @@
 		return response.json(); 
 	})
 	.then((json) => {
+        let crimeList = document.querySelector("#crime-list");
+        
 		for(item of json){
-            console.log(item["primary_type"]);
+            let type = item["primary_type"];
+            let templateItem = document.querySelector(".template-crime").cloneNode(true);   
+            templateItem.classList.remove("template-crime");
+            let image = "";
+            switch(type){
+                case "THEFT":
+                    image = document.querySelector("#theft").cloneNode(true);
+                    break;
+                case "ASSULT":
+                case "BATTERY":
+                case "WEAPONS VIOLATION":
+                case "HOMICIDE":
+                    image = document.querySelector("#violent").cloneNode(true);
+                    break;
+               case "NARCOTICS":
+                    image = document.querySelector("#narcotics").cloneNode(true);
+                    break;
+                case "MOTOR VEHICLE THEFT":
+                    image = document.querySelector("#vehicle").cloneNode(true);
+                    break;
+                case "CRIMINAL DAMAGE":
+                case "DECEPTIVE PRACTICE":
+                    image = document.querySelector("#deceptive").cloneNode(true);
+                    break;
+                case "CRIMINAL TRESPASS":
+                case "BURGLARY":
+                    image = document.querySelector("#trespass").cloneNode(true);
+                    break;
+                default:
+                    image = document.querySelector("#otherCrime").cloneNode(true);
+                    
+            }
+            
+            if(image != ""){
+               image.classList.remove("crime-image-template");
+                templateItem.insertBefore(image, templateItem.firstChild);
+                templateItem.querySelector(".crime-desc").textContent =type + ": " +  item["description"];
+                templateItem.querySelector(".crime-location").textContent = item["block"];
+                crimeList.appendChild(templateItem); 
+            }
+            
         }
         
 	}); 
