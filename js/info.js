@@ -1,7 +1,13 @@
-let getAddr = ()=>{
+//willneed to use the Promise.All() method to sync up the promises
+
+let getAddr = (addr)=>{
+    addr = addr.split(" ");
+    addr = addr.join("+");
+    
     let url ="https://maps.googleapis.com/maps/api/geocode/json";
-    let address = "?address=1250+South+Halsted+Street";
+    let address = "?address=" + addr;
     let ending = ",+Chicago,+IL&key=AIzaSyD4CUESqGN4_hOPJTQnT3JFkerOgEANnEM";
+    let ret = ""; 
     url = url + address + ending;
     fetch(url)
 	.then((response) =>{
@@ -9,7 +15,7 @@ let getAddr = ()=>{
 	})
 	.then((json) => {
         console.log(json["results"][0]["geometry"]["location"]);
-        
+        ret = json["results"][0]["geometry"]["location"]; //return the lat and long of the address
 	}); 
     
 }
