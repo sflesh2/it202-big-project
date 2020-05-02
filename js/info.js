@@ -1,4 +1,68 @@
+
+
 //willneed to use the Promise.All() method to sync up the promises
+let getTime = ()=>{
+    let currentdate = new Date(); 
+    let datetime = currentdate.getDate() + "/"
+        + (currentdate.getMonth()+1)  + "/" 
+        + currentdate.getFullYear() + " @ "  
+        + currentdate.getHours() + ":"  
+        + currentdate.getMinutes() + ":" 
+        + currentdate.getSeconds();
+    return datetime;
+}
+
+let createRecord = (searchAddress, searchYear, searchRadius)=>{
+    return {'date': getTime(), 'address': searchAddress, 'year': searchYear, 'radius': searchRadius};
+}
+
+//a test of the database
+var query = new Dexie("query-database");
+query.version(1).stores({
+  search: 'id,searchInfo',
+  data: 'id,queryData', 
+  idCoutner: 'id'
+});
+
+let initCounter = ()=>{
+    
+    query.idCounter.put({id: 1})
+    .then(e=>{return query.idCounter.get(1);})
+    .catch(error=>{alert("Error With init: " + error);});
+   
+}
+
+let incId = ()=>{
+    return;
+}
+
+query.search.put({id: 1, searchInfo: createRecord('21 E James Way', '2020', '.25')})
+.then(e=>{
+   return query.search.get(1);
+})
+.then(info=>{console.log(info['searchInfo']);}).catch(e=>{alert("Error: " + error);});
+//
+// Put some data into it
+//
+/*db.friends.put({name: "Justin", shoeSize: 7}).then (function(){
+  //
+  // Then when data is stored, read from it
+  //
+  return db.friends.get('Nicolas');
+}).then(function (friend) {
+  //
+  // Display the result
+  //
+  alert ("Nicolas has shoe size " + friend.shoeSize);
+}).catch(function(error) {
+ //
+ // Finally don't forget to catch any error
+ // that could have happened anywhere in the
+ // code blocks above.
+ //
+ alert ("Ooops: " + error);
+});*/
+
 
 let getAddr = (addr)=>{
     addr = addr.split(" ");
@@ -297,4 +361,7 @@ document.querySelector(".map-button").addEventListener("click", (e)=>{
     initMap();
     changeScene("Maps");
 });
-    
+
+
+
+
