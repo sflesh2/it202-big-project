@@ -39,6 +39,10 @@
           <i class="material-icons mdc-list-item__graphic"  aria-hidden="true">emoji_objects</i>
           <span class="mdc-list-item__text">Data</span>
         </a>
+        <a class="mdc-list-item" id="maps" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">map</i>
+            <span class="mdc-list-item__text">map</span>
+        </a>
        
         <a class="mdc-list-item" id="weather" href="#">
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">brightness_5</i>
@@ -54,7 +58,7 @@
   <div class="mdc-top-app-bar__row">
     <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
       <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
-      <span class="mdc-top-app-bar__title">Crime And Safety App</span>
+      <span class="mdc-top-app-bar__title">Chicago Crime</span>
     </section>
     <!--section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
       <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Download">file_download</button>
@@ -109,9 +113,9 @@
             </ul>
        </div>
         
-        <button class="mdc-button graph-button mdc-button--raised"/>
+        <button class="mdc-button map-button mdc-button--raised"/>
         <div class="mdc-button__ripple"></div>
-        <span class="mdc-button__label">Graph</span>
+        <span class="mdc-button__label">View Map</span>
     </div>
     
     <!--Allows the user to add new countries to be tracked-->
@@ -126,7 +130,7 @@
             
             <label class="filter-input-item mdc-text-field mdc-text-field--no-label">
               <div class="mdc-text-field__ripple"></div>
-              <input class="mdc-text-field__input" type="text" id="addressInput" placeholder="Address" aria-label="Label">
+              <input class="mdc-text-field__input" type="text" id="addressInput" placeholder="Location/Address(Ex: 'The Bean' or '1250 S Halstead St')" aria-label="Label">
               <div class="mdc-line-ripple"></div>
             </label>
             
@@ -150,7 +154,13 @@
         
     </div>
      
-    <!-- charts the data that is listed in the "data page" --> 
+      
+    <div class="page page-maps" id="Maps">
+        <!--The div element for the map -->
+        <div id="map"></div>
+    </div>  
+      
+    <!-- charts the data that is listed in the "Weather page" --> 
     <div class="page page-charts" id="Weather">
         <h1 class="title graph-title">Weather Data Near You:</h1>
         <div id="chart_div" style = "width: 550px; height: 400px; margin: 0 auto"></div>
@@ -166,7 +176,7 @@
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.clear-button'));
     mdc.ripple.MDCRipple.attachTo(document.querySelector('.search-button'));
     //mdc.ripple.MDCRipple.attachTo(document.querySelector('.type-button'));
-    //mdc.ripple.MDCRipple.attachTo(document.querySelector('.graph-button'));  
+    mdc.ripple.MDCRipple.attachTo(document.querySelector('.map-button'));  
       
     mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('header.mdc-top-app-bar'));
 
@@ -185,6 +195,23 @@
        <script type = "text/javascript">
          google.charts.load('current', {packages: ['corechart','line']});  
       </script>
+      
+      
+      
+    <script>
+
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4CUESqGN4_hOPJTQnT3JFkerOgEANnEM">
+    </script> 
+      
+      
     <script src="./js/info.js"></script>  
+    
   </body>
 </html>
