@@ -1,5 +1,4 @@
 
-//willneed to use the Promise.All() method to sync up the promises
 let getTime = ()=>{
     let currentdate = new Date(); 
     let datetime = currentdate.getDate() + "/"
@@ -22,24 +21,7 @@ query.version(1).stores({
   data: 'date,allCrimeData,startLongLat,overallRadius,radInMiles', 
 });
 
-async function databaseIsEmpty(){
-    let count = 0; 
-    let result = await Promise.resolve(
-        query.search.each(e=>{
-            count++;
-        }).then(e=>{}));
-    
-    
-    if(count > 0){
-        console.log("false");
-        return false;
-    }else{
-        console.log("true");
-        return true;
-    }
-    
-    
-}
+
 
 
 let clearDatabase = () =>{
@@ -235,10 +217,12 @@ document.querySelectorAll("aside.mdc-drawer a.mdc-list-item").forEach(item=>{
            }else if(target == "add"){
                changeScene("Add");
            }else if(target == "weather"){
+               loadWeather();
                changeScene("Weather");
            }else if(target == "maps"){
                changeScene("Maps");
            }else if(target == "history"){
+               loadHistory();
                changeScene("History");
            }
            drawer.open = false;
@@ -351,37 +335,64 @@ document.querySelector(".map-button").addEventListener("click", (e)=>{
 
 
 let newHistoryCard = (address, year, crimeData, longLat, oRad, radMiles)=>{
-    let x = document.querySelector(".template-card").cloneNode(true);
-   
+
     let time = getTime(); 
-    x.classList.remove("template-card");
-    x.querySelector("h2").textContent = time; //put the date of the entry here 
-    x.querySelector("h3").textContent = year + ": " + address + " with " + radMiles + " miles"; //address here
-    document.querySelector(".page-history").appendChild(x);
-    x.querySelector(".card-delete").addEventListener("click", button=>{
-        let index = button["path"][4].querySelector("h2").textContent; 
-        removeDatabaseIndex(index);
-        document.querySelector(".page-history").removeChild(button["path"][4]);
-    });
-    
-    x.querySelector(".card-search").addEventListener("click", button=>{
-        let index = button["path"][4].querySelector("h2").textContent; 
-        query.data.get(index)
-        .then(items=>{
-            allCrimeData = items['allCrimeData'];
-            startLongLat = items['startLongLat'];
-            overallRadius = items['overallRadius'];
-            radInMiles = items['radInMiles'];
-            changeScene("Data");
-            addListItems(allCrimeData);
-        })
-    });
-    
-    query.search.put({date: time, searchInfo: {address, year, radInMiles}}).catch(e=>{alert("Error storing history: " + e);});
-    query.data.put({date: time, allCrimeData: crimeData, startLongLat: longLat, overallRadius:oRad, radInMiles: radMiles }).catch(e=>{alert("Error storing history: " + e);});
+
+    query.search.add({date: time, searchInfo: createRecord(address, year, radInMiles)}).catch(e=>{alert("Error storing history: " + e);});
+    query.data.add({date: time, allCrimeData: crimeData, startLongLat: longLat, overallRadius:oRad, radInMiles: radMiles }).catch(e=>{alert("Error storing history: " + e);});
     
     
 };
+
+let loadHistory = ()=>{
+    let history = document.querySelector(".page-history");
+    let itr = document.querySelectorAll(".test-card"); 
+    for(let child of itr){
+        if(child.classList.contains("template-card")){
+            
+        }else{
+           history.removeChild(child);
+        }
+        
+        
+    }
+    
+    query.search.each(info=>{
+        
+        let x = document.querySelector(".template-card").cloneNode(true);
+   
+        let time = info['date'];
+        let year = info['searchInfo']['year'];
+        let address = info['searchInfo']['address'];
+        let radMiles = info['searchInfo']['radius'];
+        
+        x.classList.remove("template-card");
+        x.querySelector("h2").textContent = time; //put the date of the entry here 
+        x.querySelector("h3").textContent = year + ": " + address + " with " + radMiles + " miles"; //address here
+        
+        document.querySelector(".page-history").appendChild(x);
+        
+        x.querySelector(".card-delete").addEventListener("click", button=>{
+            let index = x.querySelector("h2").textContent; 
+            removeDatabaseIndex(index);
+            document.querySelector(".page-history").removeChild(button["path"][4]);
+        });
+
+        x.querySelector(".card-search").addEventListener("click", button=>{
+            let index = x.querySelector("h2").textContent; 
+            query.data.get(index)
+            .then(items=>{
+                allCrimeData = items['allCrimeData'];
+                startLongLat = items['startLongLat'];
+                overallRadius = items['overallRadius'];
+                radInMiles = items['radInMiles'];
+                changeScene("Data");
+                addListItems(allCrimeData);
+            })
+        });
+    });
+    
+}
 
 
 let removeDatabaseIndex = (index)=>{
@@ -389,4 +400,59 @@ let removeDatabaseIndex = (index)=>{
     query.data.delete(index);
 }
 
+
+
+function showLocation(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    let url = "https://api.openweathermap.org/data/2.5/weather?lat="+ latitude.toString() +"&lon=" + longitude.toString() + "&appid=91161a209e995adfc6053e1be913d137&units=imperial"
+    
+    fetch(url).then(e =>{
+        return e.json(); 
+    }).then(function (data){
+        console.log(data);
+        document.querySelector("#temp-display").textContent = "Temp: " + data['main']['temp'].toString() + " degrees";
+        document.querySelector("#weather-description").textContent = "Description: " + data['weather'][0]['description'].toString();
+        document.querySelector("#feels-like").textContent = "Feels like: " + data['main']['feels_like'].toString() + " degrees";
+        document.querySelector("#max-temp").textContent = "High: " + data['main']['temp_max'].toString() + " degrees";
+        document.querySelector("#min-temp").textContent = "Low: " + data['main']['temp_min'].toString() + " degrees";
+        
+    }).catch(er => {
+        console.warn("ther was an error", er);
+    });
+
+}
+
+ function errorHandler(err) {
+    if(err.code == 1) {
+       alert("Error: Access is denied!");
+    } else if( err.code == 2) {
+       alert("Error: Position is unavailable!");
+    }
+ }
+
+
+let loadWeather = ()=>{
+    if ("geolocation" in navigator) { 
+        if(navigator.geolocation){ 
+            var options = {timeout:60000};
+            navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
+        }else{
+            alert("Geolocation is not available");
+        }
+    }else{ 
+        alert("Geolocation is not available");
+    }
+}
+
+//in the main script 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker
+      .register("/serviceworker.js")
+      .then(res => console.log("service worker registered"))
+      .catch(err => console.log("service worker not registered", err))
+  })
+}
+changeScene('Home');
 

@@ -193,23 +193,10 @@ html , body{
 }
 
 #Home{
-    text-align: center; 
+    text-align: left
 }
 
-.home-data{
-     position: fixed;
-    left: 25%; 
-    right: 25%; 
-    top:40%; 
-    border-radius: 10px; 
-    width: 50%; 
-    height: 50%;
-    border-color: black; 
-    border-width: 2px; 
-    border-style: solid; 
-  
-    background-color: whitesmoke;
-}
+
 
 .display{
     margin-top: 10%; 
@@ -274,6 +261,25 @@ main{
     margin-top: 0;
 }
 
+
+#Weather{
+    text-align: center; 
+}
+
+.weather-data{
+    position: fixed;
+    left: 5%; 
+    right: 25%; 
+    top:10%; 
+    border-radius: 10px; 
+    width: 90%; 
+    height: 70%;
+    border-color: black; 
+    border-width: 2px; 
+    border-style: solid; 
+  
+    background-color: whitesmoke;
+}
 
 
 
