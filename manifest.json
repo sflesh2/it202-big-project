@@ -1,0 +1,16 @@
+{
+  "name": "Chicago Crime",
+  "short_name": "Chi-Crime",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#20B2AA",
+  "theme_color": "#20B2AA",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+            "src": "./favicon.ico",
+            "sizes": "256x256",
+            "type": "image/png"
+     }
+  ]
+}
