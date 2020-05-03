@@ -43,6 +43,11 @@
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">map</i>
             <span class="mdc-list-item__text">map</span>
         </a>
+          
+        <a class="mdc-list-item" id="history" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">history</i>
+            <span class="mdc-list-item__text">Search History</span>
+        </a>
        
         <a class="mdc-list-item" id="weather" href="#">
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">brightness_5</i>
@@ -158,6 +163,27 @@
     <div class="page page-maps" id="Maps">
         <!--The div element for the map -->
         <div id="map"></div>
+    </div>  
+      
+    <div class="page page-history" id="History">
+        <div class="mdc-card template-card demo-card  test-card">
+          <div class="mdc-card__primary-action demo-card__primary-action" tabindex="0">
+           <div class="card-text demo-card__primary">
+              <h2 class="demo-card__title mdc-typography mdc-typography--headline6">Date</h2>
+              <h3 class="subtext demo-card__subtitle mdc-typography mdc-typography--subtitle2">Address</h3>
+            </div>
+            </div>
+          <div class="card-buttons mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+              <button class="card-search mdc-button mdc-card__action mdc-card__action--button">  <span class="mdc-button__ripple"></span> Search</button>
+              <button class="card-delete mdc-button mdc-card__action mdc-card__action--button">  <span class="mdc-button__ripple"></span> Delete</button>
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        
     </div>  
       
     <!-- charts the data that is listed in the "Weather page" --> 

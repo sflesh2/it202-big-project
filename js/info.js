@@ -19,7 +19,7 @@ let createRecord = (searchAddress, searchYear, searchRadius)=>{
 var query = new Dexie("query-database");
 query.version(1).stores({
   search: 'date,searchInfo',
-  data: 'date,queryData', 
+  data: 'date,allCrimeData,startLongLat,overallRadius,radInMiles', 
 });
 
 async function databaseIsEmpty(){
@@ -42,54 +42,10 @@ async function databaseIsEmpty(){
 }
 
 
-//This is just a test of the data being put into the data base. It should be fixed later
-let initData = () =>{
-    let time = getTime(); 
-    console.log(time);
-    query.search.put({date: time, searchInfo: createRecord('21 E James Way', '2020', '.25')})
-    .then(e=>{
-       return query.search.get(time);
-    })
-    .then(info=>{console.log(info['searchInfo']);}).catch(e=>{alert("Error: " + error);}); 
-}
-
 let clearDatabase = () =>{
     query.search.clear().catch(e=>{alert("An Error has occured while fetching" + e);});
-    query.data.clear().catch(t =>{alert("An Error has occured while fetching" + e);});
+    query.data.clear().catch(t =>{alert("An Error has occured while fetching" + t);});
 }
-
-let printItems = ()=>{
-    query.search.each(e=>{
-        console.log("item: ");
-        console.log(e);
-        query.date.get(e['date'])
-        .then(item=>{
-            console.log(item);
-        })
-    })
-}
-
-//
-// Put some data into it
-//
-/*db.friends.put({name: "Justin", shoeSize: 7}).then (function(){
-  //
-  // Then when data is stored, read from it
-  //
-  return db.friends.get('Nicolas');
-}).then(function (friend) {
-  //
-  // Display the result
-  //
-  alert ("Nicolas has shoe size " + friend.shoeSize);
-}).catch(function(error) {
- //
- // Finally don't forget to catch any error
- // that could have happened anywhere in the
- // code blocks above.
- //
- alert ("Ooops: " + error);
-});*/
 
 
 let getAddr = (addr)=>{
@@ -109,7 +65,6 @@ let getAddr = (addr)=>{
 let addListItems = (json)=>{
     let crimeList = document.querySelector("#crime-list");
         //allData = json;
-        console.log(json);
 		for(item of json){
             let type = item["primary_type"];
             let templateItem = document.querySelector(".template-crime").cloneNode(true);   
@@ -191,6 +146,8 @@ let getCrimeData = (year, address, radius)=>{
 	})
 	.then((json) => {
        allCrimeData = json;
+       newHistoryCard(address, year, allCrimeData, startLongLat, overallRadius, radInMiles);
+        
        addListItems(json);
        
 	}); 
@@ -281,6 +238,8 @@ document.querySelectorAll("aside.mdc-drawer a.mdc-list-item").forEach(item=>{
                changeScene("Weather");
            }else if(target == "maps"){
                changeScene("Maps");
+           }else if(target == "history"){
+               changeScene("History");
            }
            drawer.open = false;
        });
@@ -391,5 +350,43 @@ document.querySelector(".map-button").addEventListener("click", (e)=>{
 });
 
 
+let newHistoryCard = (address, year, crimeData, longLat, oRad, radMiles)=>{
+    let x = document.querySelector(".template-card").cloneNode(true);
+   
+    let time = getTime(); 
+    x.classList.remove("template-card");
+    x.querySelector("h2").textContent = time; //put the date of the entry here 
+    x.querySelector("h3").textContent = year + ": " + address + " with " + radMiles + " miles"; //address here
+    document.querySelector(".page-history").appendChild(x);
+    x.querySelector(".card-delete").addEventListener("click", button=>{
+        let index = button["path"][4].querySelector("h2").textContent; 
+        removeDatabaseIndex(index);
+        document.querySelector(".page-history").removeChild(button["path"][4]);
+    });
+    
+    x.querySelector(".card-search").addEventListener("click", button=>{
+        let index = button["path"][4].querySelector("h2").textContent; 
+        query.data.get(index)
+        .then(items=>{
+            allCrimeData = items['allCrimeData'];
+            startLongLat = items['startLongLat'];
+            overallRadius = items['overallRadius'];
+            radInMiles = items['radInMiles'];
+            changeScene("Data");
+            addListItems(allCrimeData);
+        })
+    });
+    
+    query.search.put({date: time, searchInfo: {address, year, radInMiles}}).catch(e=>{alert("Error storing history: " + e);});
+    query.data.put({date: time, allCrimeData: crimeData, startLongLat: longLat, overallRadius:oRad, radInMiles: radMiles }).catch(e=>{alert("Error storing history: " + e);});
+    
+    
+};
+
+
+let removeDatabaseIndex = (index)=>{
+    query.search.delete(index); 
+    query.data.delete(index);
+}
 
 
