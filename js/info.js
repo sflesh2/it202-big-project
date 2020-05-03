@@ -1,5 +1,4 @@
 
-
 //willneed to use the Promise.All() method to sync up the promises
 let getTime = ()=>{
     let currentdate = new Date(); 
@@ -13,34 +12,63 @@ let getTime = ()=>{
 }
 
 let createRecord = (searchAddress, searchYear, searchRadius)=>{
-    return {'date': getTime(), 'address': searchAddress, 'year': searchYear, 'radius': searchRadius};
+    return {'address': searchAddress, 'year': searchYear, 'radius': searchRadius};
 }
 
 //a test of the database
 var query = new Dexie("query-database");
 query.version(1).stores({
-  search: 'id,searchInfo',
-  data: 'id,queryData', 
-  idCoutner: 'id'
+  search: 'date,searchInfo',
+  data: 'date,queryData', 
 });
 
-let initCounter = ()=>{
+async function databaseIsEmpty(){
+    let count = 0; 
+    let result = await Promise.resolve(
+        query.search.each(e=>{
+            count++;
+        }).then(e=>{}));
     
-    query.idCounter.put({id: 1})
-    .then(e=>{return query.idCounter.get(1);})
-    .catch(error=>{alert("Error With init: " + error);});
-   
+    
+    if(count > 0){
+        console.log("false");
+        return false;
+    }else{
+        console.log("true");
+        return true;
+    }
+    
+    
 }
 
-let incId = ()=>{
-    return;
+
+//This is just a test of the data being put into the data base. It should be fixed later
+let initData = () =>{
+    let time = getTime(); 
+    console.log(time);
+    query.search.put({date: time, searchInfo: createRecord('21 E James Way', '2020', '.25')})
+    .then(e=>{
+       return query.search.get(time);
+    })
+    .then(info=>{console.log(info['searchInfo']);}).catch(e=>{alert("Error: " + error);}); 
 }
 
-query.search.put({id: 1, searchInfo: createRecord('21 E James Way', '2020', '.25')})
-.then(e=>{
-   return query.search.get(1);
-})
-.then(info=>{console.log(info['searchInfo']);}).catch(e=>{alert("Error: " + error);});
+let clearDatabase = () =>{
+    query.search.clear().catch(e=>{alert("An Error has occured while fetching" + e);});
+    query.data.clear().catch(t =>{alert("An Error has occured while fetching" + e);});
+}
+
+let printItems = ()=>{
+    query.search.each(e=>{
+        console.log("item: ");
+        console.log(e);
+        query.date.get(e['date'])
+        .then(item=>{
+            console.log(item);
+        })
+    })
+}
+
 //
 // Put some data into it
 //
