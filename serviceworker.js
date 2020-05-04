@@ -1,10 +1,10 @@
 const chicagoCrime = "dev-chiCrime-site-v3"
 const assets = [
-  "/",
-  "/index.html",
-  "/css/format.css",
-  "/js/info.js",
-  "/favicon.ico",
+  "./",
+  "./index.html",
+  "./css/format.css",
+  "./js/info.js",
+  "./favicon.ico",
   "https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css",
   "https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js",
   "https://fonts.googleapis.com/icon?family=Material+Icons",
