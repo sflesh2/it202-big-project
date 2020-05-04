@@ -444,7 +444,7 @@ let loadWeather = ()=>{
         alert("Geolocation is not available");
     }
 }
-console.log("test");
+console.log("test2");
 //in the main script 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function() {
