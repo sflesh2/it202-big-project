@@ -449,7 +449,7 @@ console.log("test");
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function() {
     navigator.serviceWorker
-      .register("https://sflesh2.github.io/serviceworker.js")
+      .register("https://github.com/sflesh2/it202-big-project/serviceworker.js")
       .then(res => console.log("service worker registered"))
       .catch(err => console.log("service worker not registered", err))
   })
